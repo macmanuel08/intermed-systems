@@ -13,14 +13,16 @@ export const metadata: Metadata = {
   description: "Ease your admin works",
 };
 
-interface LayoutProps {
+export default function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}
-
-export default function RootLayout({ children }: LayoutProps) {
+}>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>
+      <body
+        className={`${poppins.variable} antialiased`}
+      >
         {children}
       </body>
     </html>
