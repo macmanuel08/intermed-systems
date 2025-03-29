@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline';
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -20,6 +21,9 @@ export default function LogoutButton() {
   }
 
   return (
-    <button onClick={handleLogout}>Logout</button>
+    <button onClick={handleLogout} className='logout-btn primary-btn'>
+      <ArrowRightStartOnRectangleIcon />
+      Logout
+    </button>
   );
 }

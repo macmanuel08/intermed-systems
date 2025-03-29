@@ -29,6 +29,8 @@ body {
   font-family: var(--font-sans);
 }
 
+a {text-decoration: none;}
+
 .flex {
   display: flex;
   justify-content: center;
@@ -115,3 +117,63 @@ input {
 }
 
 .error-message {color: #e62a2a;}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: minmax(150px, 25%) 1fr;
+  height: 100vh;
+  height: 100svh;
+  min-height: 900px;
+}
+
+.business-logo {
+  max-width: 190px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.nav-links {
+  padding: 15px 20px;
+}
+
+.sidebar {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.link-item {
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.link-item:not(:last-child) {margin-bottom: 15px;}
+
+.link-item svg {
+  stroke: var(--secondary);
+  width: 30px;
+}
+
+.link-item {
+  justify-content: flex-start;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  background: #cc1212;
+  gap: 5px;
+  width: 100%;
+  line-height: 20px;
+  justify-content: center;
+}
+
+.logout-btn svg {
+  width: 20px;
+}
+
+footer {
+  padding: 10px 20px;
+}
