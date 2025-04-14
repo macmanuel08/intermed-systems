@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     description: 'Login page for Intermed System'
 };
 
-export default function RootLayout({
+export default function LoginLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

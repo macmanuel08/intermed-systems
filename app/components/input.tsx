@@ -4,7 +4,7 @@ import { ChangeEvent } from 'react';
 
 interface InputProps {
   type: string;
-  label: string;
+  label?: string;
   name: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -22,6 +22,7 @@ export default function Input({ type, label, name, value, onChange, placeholder 
         value={value} 
         onChange={onChange} 
         placeholder={placeholder} 
+        readOnly={type === "hidden"}
       />
     </div>
   );

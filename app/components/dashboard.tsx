@@ -1,30 +1,17 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { User } from '@/types';
+
+import { useUser } from '../dashboard/lib/userContext';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+      template: '%s | Dashboard',
+      default: 'Intermed Systems'
+  }
+};
 
 export default function Dashboard() {
-  const [user, setUser] = useState<User | null>(null);
-  const router = useRouter();
+  const { user } = useUser();
 
-  useEffect(() => {
-    async function fetchSession() {
-      const res = await fetch('/api/auth/session');
-  
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data.user);
-      } else {
-        router.push('/login');
-      }
-    }
-    fetchSession();
-  }, [router]);  
-  console.log(user);
-  if (user != null) {
-    console.log(user.name)
-    return <h1 key={user.name}>Welcome, {user.name}</h1>
-  }
-
-  return <p>Loading...</p>;
+  return <h1>Welcome, {user?.name}</h1>;
 }

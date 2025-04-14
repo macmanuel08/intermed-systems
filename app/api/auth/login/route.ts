@@ -1,4 +1,3 @@
-// app/api/auth/login/route.ts
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { Pool } from 'pg';
@@ -44,7 +43,7 @@ export async function POST(req: Request) {
     const cookie = serialize('session_token', sessionToken, {
       httpOnly: true, // Ensures the cookie can't be accessed by JavaScript
       secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
-      maxAge: 60 * 60 * 1, // 1 hour expiry
+      maxAge: 60 * 60 * 12, // 12 hour expiry
       path: '/', // Available throughout the site
     });
 

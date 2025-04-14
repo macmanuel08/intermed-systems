@@ -8,6 +8,7 @@ export default function BusinessLogo() {
             height={446}
             alt="Logo of Intermed Systems"
             className="business-logo"
+            priority={true}
         />
     );
 }

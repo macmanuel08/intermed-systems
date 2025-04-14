@@ -1,24 +1,43 @@
-import type { Metadata } from "next";
+'use client';
+
 import SidebarNav from "../components/sidebarNav";
+import { useUser } from "./lib/userContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export const metadata: Metadata = {
-    title: {
-        template: '%s | Dashboard',
-        default: 'Intermed Systems'
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { user, loading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user === null) {
+      router.push('/login');
     }
-};
+  }, [user, loading, router]);
 
-export default function RootLayout({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
+  if (loading) {
     return (
       <div className="dashboard">
         <SidebarNav />
         <main>
-            {children}
+          <p>Loading session...</p>
         </main>
       </div>
     );
   }
+
+  if (user === null) {
+    return null; // Or something fallback-y
+  }
+
+  return (
+    <div className="dashboard">
+      <SidebarNav />
+      <main>{children}</main>
+    </div>
+  );
+}
