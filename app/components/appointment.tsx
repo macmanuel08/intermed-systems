@@ -29,7 +29,7 @@ export default function Appointment() {
     
     const [timeSlots, setTimeSlots] = useState<string[][]>([]);
     const [selectedTime, setSelectedTime] = useState('');
-    const [availableDays, setAvailableDays] = useState<number[] | null>([]);
+    //const [availableDays, setAvailableDays] = useState<number[] | null>([]);
     const { user } = useUser();
 
     //let selectedDoctorIndex: number;
@@ -38,7 +38,7 @@ export default function Appointment() {
         roomNumber
         availableFrom
         availableUntil
-        availableDates (update getter funtion)
+        availableDays (update getter funtion)
 
         Doctor and Date state
         timeSlots
@@ -47,6 +47,7 @@ export default function Appointment() {
     const roomNumber = useRef(0);
     const availableFrom = useRef('');
     const availableUntil = useRef('');
+    const availableDays = useRef<number[] | null>([])
 
     const initialState: AppointmentState = { message: null, errors: {} };
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -95,7 +96,7 @@ export default function Appointment() {
                 if (selectedDoctorId != "") {
                     const fetchedAvailableDays = await getAvailableDays(selectedDoctorId);
                     if (fetchAvailableDays !== null) {
-                        setAvailableDays(fetchedAvailableDays);
+                        availableDays.current = fetchedAvailableDays;
                     }
                 }
             }
@@ -132,7 +133,9 @@ export default function Appointment() {
                     }
                 </select>
             </div>
-            <DateInput selectedDate={selectedDate} availableDays={availableDays} onChange={setSelectedDate} name="date" label="Date" placeholder="Select A Date" />
+            {
+                typeof availableDays != null && <DateInput selectedDate={selectedDate} availableDays={availableDays.current} onChange={setSelectedDate} name="date" label="Date" placeholder="Select A Date" />
+            }
             {
                 typeof selectedDoctorId != null && selectedDate != null && <Input name="time" type="hidden" label="Select Time" value={selectedTime} placeholder="Select Time" />
             }
