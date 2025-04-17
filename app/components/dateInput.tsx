@@ -20,8 +20,6 @@ export default function DateInput({ selectedDate, onChange, label, placeholder, 
     onChange(fixedDate);
   };
 
-  console.log(availableDays)
-
   return (
     <div className='input-block margin-bottom-2'>
       <label htmlFor={name} className='block'>{label}</label>
