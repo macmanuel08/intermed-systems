@@ -3,8 +3,6 @@
 /*
     Bugs:
         Fix initial doctor
-        Fix doctor change & date change
-        Fix to fetch right time slots for a certain doctor & date, excluding the slots already taken
 
         Form states
             Input: empty, typing
@@ -26,10 +24,8 @@ export default function Appointment() {
     const [doctors, setDoctors] = useState<DoctorType[]>([]);
     const [selectedDoctorId, setSelectedDoctorId] = useState<string>("")
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    
     const [timeSlots, setTimeSlots] = useState<string[][]>([]);
     const [selectedTime, setSelectedTime] = useState('');
-    //const [availableDays, setAvailableDays] = useState<number[] | null>([]);
     const { user } = useUser();
 
     //let selectedDoctorIndex: number;
@@ -77,6 +73,13 @@ export default function Appointment() {
                     console.error('Error fetching doctor information:', error);
                 }
             };
+            setSelectedDate(null);
+            fetchDoctor();
+        }
+    }, [selectedDoctorId]);
+
+    useEffect(() => {
+        if (selectedDoctorId) {
             
             const fetchTimeSlots = async () => {
                 try {
@@ -100,12 +103,10 @@ export default function Appointment() {
                     }
                 }
             }
-
-            fetchDoctor();
+            
             fetchAvailableDays();
             fetchTimeSlots();
-        }        
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        }
     }, [selectedDate, selectedDoctorId]);
 
     const handleDoctorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -134,7 +135,7 @@ export default function Appointment() {
                 </select>
             </div>
             {
-                typeof availableDays != null && <DateInput selectedDate={selectedDate} availableDays={availableDays.current} onChange={setSelectedDate} name="date" label="Date" placeholder="Select A Date" />
+                typeof availableDays != null && selectedDoctorId != "" && <DateInput selectedDate={selectedDate} availableDays={availableDays.current} onChange={setSelectedDate} name="date" label="Date" placeholder="Select A Date" />
             }
             {
                 typeof selectedDoctorId != null && selectedDate != null && <Input name="time" type="hidden" label="Select Time" value={selectedTime} placeholder="Select Time" />

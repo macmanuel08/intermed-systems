@@ -124,15 +124,18 @@ export async function generateTimeSlots(
         SELECT time
         FROM appointments
         WHERE date = ${selectedDate?.toISOString().split('T')[0]} AND doctor_id = ${id}
+        ORDER BY time ASC
       `;
       takenSlots = fetchedTakenSlots.rows.map(row => row.time as string);
     }
-
   } catch (error) {
     console.error("Failed to get doctor's current time slots:", error);
   }
 
   const pad = (num: number) => num.toString().padStart(2, '0');
+  function formatTime(hour: number, minute: number): string {
+    return `${pad(hour)}:${pad(minute)}:00`;
+  }
 
   const [startHour, startMinute] = startTime.split(':').map(Number);
   const [endHour, endMinute] = endTime.split(':').map(Number);
@@ -152,8 +155,10 @@ export async function generateTimeSlots(
   while (start <= end) {
     const hour = start.getHours();
     const minute = start.getMinutes();
+
+    const currentTime = formatTime(hour, minute);
     
-    if (index < takenSlotsLength && takenSlots[index] == `${hour}:${pad(minute)}:00`) {
+    if (index < takenSlotsLength && takenSlots[index] === currentTime) {
       index++;
       start.setMinutes(start.getMinutes() + intervalMinutes);
       continue;

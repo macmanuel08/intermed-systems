@@ -31,6 +31,7 @@ export default function DateInput({ selectedDate, onChange, label, placeholder, 
         name={name}
         dateFormat="yyyy-MM-dd"
         showTimeSelect={false}
+        autoComplete="off"
       />
     </div>
   );
