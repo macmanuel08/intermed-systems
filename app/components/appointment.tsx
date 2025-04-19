@@ -1,17 +1,5 @@
 'use client';
 
-/*
-    Bugs:
-        Fix initial doctor
-
-        Form states
-            Input: empty, typing
-            Button: submitting
-            Successful network response: success
-            Failed network response: Error
-
-*/
-
 import { useState, useEffect, useActionState, useRef } from "react";
 import Input from "./input";
 import DateInput from "./dateInput";
@@ -19,6 +7,7 @@ import { fetchDoctorNames } from "../dashboard/lib/data";
 import { useUser } from "../dashboard/lib/userContext";
 import { AppointmentState, createAppointment, getDoctorInfo, generateTimeSlots, getAvailableDays } from "../dashboard/lib/actions";
 import { DoctorType } from "@/types";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Appointment() {
     const [doctors, setDoctors] = useState<DoctorType[]>([]);
@@ -27,18 +16,6 @@ export default function Appointment() {
     const [timeSlots, setTimeSlots] = useState<string[][]>([]);
     const [selectedTime, setSelectedTime] = useState('');
     const { user } = useUser();
-
-    //let selectedDoctorIndex: number;
-    /*
-        Doctor state
-        roomNumber
-        availableFrom
-        availableUntil
-        availableDays (update getter funtion)
-
-        Doctor and Date state
-        timeSlots
-    */
 
     const roomNumber = useRef(0);
     const availableFrom = useRef('');
@@ -134,26 +111,50 @@ export default function Appointment() {
                     }
                 </select>
             </div>
-            {
-                typeof availableDays != null && selectedDoctorId != "" && <DateInput selectedDate={selectedDate} availableDays={availableDays.current} onChange={setSelectedDate} name="date" label="Date" placeholder="Select A Date" />
-            }
-            {
-                typeof selectedDoctorId != null && selectedDate != null && <Input name="time" type="hidden" label="Select Time" value={selectedTime} placeholder="Select Time" />
-            }
-            <div className="time-slots margin-bottom-2">
-            {timeSlots.length > 0 && selectedDate != null && timeSlots.map(timeSlot => (
-                <div onClick={handleTimeChange} key={timeSlot[0]} data-value={timeSlot[0]}>
-                    {timeSlot[1]}
-                </div>
-            ))}
-            </div>
-            <div className='input-block margin-bottom-2'>
-                <label htmlFor="description" className='block'>Additional Notes</label>
-                <textarea name="description" id="description" placeholder="Additional Notes about the appoinment."></textarea>
-            </div>
-            <Input name="status" type="hidden" value="Pending" />
-            <Input name="appointment_queue_number" type="hidden" value={`700JS${roomNumber.current}`} />
-            <button type="submit" className="primary-btn">Request Appointment</button>
+            <AnimatePresence>
+                {
+                    typeof availableDays != null && selectedDoctorId != "" && (
+                        <motion.div
+                        key="dateinput"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        >
+                            <DateInput selectedDate={selectedDate} availableDays={availableDays.current} onChange={setSelectedDate} name="date" label="Date" placeholder="Select A Date" />
+                        </motion.div>
+                    ) 
+                }
+            </AnimatePresence>
+            <AnimatePresence>
+                {
+                    typeof selectedDoctorId != null && selectedDate != null && (
+                        <motion.div
+                            key="dateinput"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <Input name="time" type="hidden" label="Select Time" value={selectedTime} placeholder="Select Time: If your desired timeslot is not listed, please try different date." />
+                            <div className="time-slots margin-bottom-2">
+                            {timeSlots.length > 0 && selectedDate != null && timeSlots.map(timeSlot => (
+                                <div onClick={handleTimeChange} key={timeSlot[0]} data-value={timeSlot[0]}>
+                                    {timeSlot[1]}
+                                </div>
+                            ))}
+                            </div>
+                            <div className='input-block margin-bottom-2'>
+                                <label htmlFor="description" className='block'>Additional Notes</label>
+                                <textarea name="description" id="description" placeholder="Additional Notes about the appoinment."></textarea>
+                            </div>
+                            <Input name="status" type="hidden" value="Pending" />
+                            <Input name="appointment_queue_number" type="hidden" value={`700JS${roomNumber.current}`} />
+                            <button type="submit" className="primary-btn">Request Appointment</button>
+                        </motion.div>
+                    )
+                }
+            </AnimatePresence>
         </form>
     );
 }

@@ -217,3 +217,9 @@ button:hover {cursor: pointer;}
   background: #3bacbf;
   color: var(--primary);
 }
+
+input, select, textarea {
+  border: 1px solid #002435;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+}
