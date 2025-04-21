@@ -15,12 +15,14 @@ export default function Appointment() {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [timeSlots, setTimeSlots] = useState<string[][]>([]);
     const [selectedTime, setSelectedTime] = useState('');
+    const [timeQueueNumber, setTimeQueueNumber] = useState('');
     const { user } = useUser();
 
     const roomNumber = useRef(0);
     const availableFrom = useRef('');
     const availableUntil = useRef('');
-    const availableDays = useRef<number[] | null>([])
+    const availableDays = useRef<number[] | null>([]);
+    const doctorInitials = useRef('');
 
     const initialState: AppointmentState = { message: null, errors: {} };
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,6 +46,7 @@ export default function Appointment() {
                             if (doctorInfo.room_number != undefined) roomNumber.current = doctorInfo.room_number;
                             if (doctorInfo.available_from != undefined) availableFrom.current = doctorInfo.available_from;
                             if (doctorInfo.available_until != undefined) availableUntil.current = doctorInfo.available_until;
+                            if (doctorInfo.initials != undefined) doctorInitials.current = doctorInfo.initials;
                         }
                     }
                 } catch (error) {
@@ -86,6 +89,13 @@ export default function Appointment() {
         }
     }, [selectedDate, selectedDoctorId]);
 
+    useEffect(() => {
+        if (selectedTime) {
+            const splittedTime = selectedTime.split(':');
+            setTimeQueueNumber(`${splittedTime[0]}${splittedTime[1]}`);
+        }
+    }, [selectedTime]);
+
     const handleDoctorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
          setSelectedDoctorId(e.target.value);
     }
@@ -95,7 +105,6 @@ export default function Appointment() {
         if (time) setSelectedTime(time);
         document.querySelector('.time-slots .active')?.classList.remove('active');
         (e.currentTarget as HTMLDivElement).classList.add('active');
-
     }
     
     return (
@@ -149,7 +158,7 @@ export default function Appointment() {
                                 <textarea name="description" id="description" placeholder="Additional Notes about the appoinment."></textarea>
                             </div>
                             <Input name="status" type="hidden" value="Pending" />
-                            <Input name="appointment_queue_number" type="hidden" value={`700JS${roomNumber.current}`} />
+                            <Input name="appointment_queue_number" type="hidden" value={`${timeQueueNumber}${doctorInitials.current}${roomNumber.current}`} />
                             <button type="submit" className="primary-btn">Request Appointment</button>
                         </motion.div>
                     )

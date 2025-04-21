@@ -92,7 +92,7 @@ export async function createAppointment(prevState: AppointmentState, formData: F
 export async function getDoctorInfo(id: string): Promise<DoctorType | null> {
   try {
     const result = await sql`
-      SELECT room_number, available_from, available_until
+      SELECT room_number, available_from, available_until, initials
       FROM doctors
       WHERE user_id = ${id}
     `;

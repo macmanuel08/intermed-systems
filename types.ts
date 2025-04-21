@@ -30,4 +30,5 @@ export type DoctorType = {
     available_days?: number[];
     specialty?: string;
     subspecialty?: string;
+    initials?: string;
 }
